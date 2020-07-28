@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd webapp
+        - cd wishlist-app
     # IMPORTANT - Please verify your build commands
     build:
       commands:
@@ -11,7 +11,7 @@ frontend:
         - npm run release
   artifacts:
     # IMPORTANT - Please verify your build output directory
-    baseDirectory: /webapp/resources/public
+    baseDirectory: /wishlist-app/resources/public
     files:
       - '**/*'
   cache:
