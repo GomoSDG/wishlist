@@ -25,4 +25,5 @@
 (defn site-layout [panel]
   [:<>
    [navbar]
-   [:div.container [panel]]])
+   [:section.section
+    [:div.container [panel]]]])
