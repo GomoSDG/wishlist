@@ -3,7 +3,6 @@
 (defn navbar []
   [:nav.navbar.is-light {:aria-label "main navigation",
                          :role       "navigation"}
-   [:div.container
     [:div.navbar-brand
      [:a.navbar-item {:href "#"}
       [:img {:src "/img/logo.png"}]]
@@ -21,7 +20,7 @@
      [:div.navbar-item
       [:div.buttons
        [:a.button.is-primary [:strong "Sign up"]]
-       [:a.button.is-light "Log in"]]]]]]])
+       [:a.button.is-light "Log in"]]]]]])
 
 (defn site-layout [panel]
   [:<>
