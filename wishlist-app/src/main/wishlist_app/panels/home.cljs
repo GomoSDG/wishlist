@@ -12,7 +12,7 @@
                          :secondary "#1c8644"}}])
 
 (defn wishlist-item [item]
-  [:div.tile.is-child.box
+  [:div.box
    [:article.media
     [:figure.media-left
      [:p.image.is-64x64
@@ -36,21 +36,17 @@
               :id        "PLID52619736"
               :url       "https://www.takealot.com/asus-tuf-gaming-15-amd-8gb-hdd-ssd-gtx1650-15-6-gaming-n-book-bl/PLID66382885"}]
     (fn []
-      [:div.tile.is-vertical.is-parent
-       [wishlist-item item]
-       [wishlist-item item]
-       [wishlist-item item]
-       [wishlist-item item]
+      [:<>
        [wishlist-item item]
        [wishlist-item item]])))
 
 (defn home []
-  [:div.tile.is-ancestor
-   [:div.tile.is-4.is-vertical.is-parent
-    [:div.tile.is-child.box
+  [:div.columns
+   [:div.column.is-3
+    [:div.box
      [:p.title "Gomotso Lilokoe"]
      [:p.subtitle "Wishlist"]
      [:div.image
-      [:img.is-rounded {:src "/img/img.jpeg"}]]]
-    [:div.tile]]
-   [wishlist]])
+      [:img.is-rounded {:src "/img/img.jpeg"}]]]]
+   [:div.column
+    [wishlist]]])
