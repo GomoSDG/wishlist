@@ -15,7 +15,7 @@
 (defn render-active-panel []
   (let [active-panel @(re-frame/subscribe [:active-panel])]
     (rdom/render
-     [site-layout active-panel]
+     [site-layout]
      (.getElementById js/document "app"))))
 
 (defn init []

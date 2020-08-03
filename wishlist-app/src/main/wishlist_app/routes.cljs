@@ -5,10 +5,16 @@
               [goog.history.EventType :as HistoryEventType])
     (:import goog.History))
 
-(secretary/set-config! :prefix "#")
+(secretary/set-config! :prefix "/")
 
 (defroute home "/" []
   (re-frame/dispatch [:set-active-panel :home]))
+
+(defroute lists "/lists" []
+  (re-frame/dispatch [:set-active-panel :wishlist/lists]))
+
+(defroute add-lists "/list/items/add" []
+  (re-frame/dispatch [:set-active-panel :wishlist/add-item]))
 
 (defn hook-browser-navigation! []
   (doto (History.)
