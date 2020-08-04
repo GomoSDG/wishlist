@@ -13,10 +13,9 @@
     :panels views/panels}))
 
 (defn render-active-panel []
-  (let [active-panel @(re-frame/subscribe [:active-panel])]
-    (rdom/render
-     [site-layout]
-     (.getElementById js/document "app"))))
+  (rdom/render
+   [site-layout]
+   (.getElementById js/document "app")))
 
 (defn init []
   (re-frame/dispatch-sync [:initialize-db])

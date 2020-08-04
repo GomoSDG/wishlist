@@ -1,4 +1,5 @@
-(ns wishlist-app.panels.wishlist.list)
+(ns wishlist-app.panels.wishlist.list
+  (:require [re-frame.core :as re-frame]))
 
 (def sites [{:id        :takealot.com
              :domains   ["www.takealot.co.za"
@@ -51,6 +52,20 @@
     [wishlist]]])
 
 (defn add-item-panel []
-  [:h1 "hello!"])
+  [:div
+   [:div.columns
+    [:div.column
+     [:div.box
+      [:h1.title "Add Item"]
+      [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]]]]])
 
+(re-frame/reg-event-db
+ :set-add-url
+ (fn [db [_ panel]]
+   (js/console.log panel)
+   (assoc db :wishlist-items/add-url panel)))
 
+(re-frame/reg-sub
+ :wishlist-items/add-url
+ (fn [db]
+   (:wishlist-items/add-url db)))

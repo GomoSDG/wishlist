@@ -3,4 +3,6 @@
 
 (defn ^{:navbar :landing} home []
   [:div.columns.is-centered
-   [:div.column.is-half]])
+   [:div.column
+    [:img {:src "/img/logo.png"}]
+    [:h2.title "Where dreams come true"]]])

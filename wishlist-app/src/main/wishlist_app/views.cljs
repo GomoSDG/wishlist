@@ -5,7 +5,7 @@
 
 (def panels {:home               #'home/home
              :wishlist/lists     #'list/list-panel
-             :wishlist/add-items #'list/add-item-panel})
+             :wishlist/add-item #'list/add-item-panel})
 
 (re-frame/reg-event-db
  :set-active-panel

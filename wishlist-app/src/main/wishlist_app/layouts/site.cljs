@@ -46,11 +46,11 @@
      [@panel]]]])
 
 (defn default-layout [panel]
-  [:<>
-   [navbar]
-   [:section.section
-    [:div.container [@panel]]]])
-
+  (let [_ (println @panel)]
+    [:<>
+     [navbar]
+     [:section.section
+      [:div.container [@panel]]]]))
 
 (def layouts {:landing #'landing-layout
               nil      #'default-layout})

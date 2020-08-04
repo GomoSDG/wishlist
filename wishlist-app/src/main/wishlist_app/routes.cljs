@@ -13,7 +13,12 @@
 (defroute lists "/lists" []
   (re-frame/dispatch [:set-active-panel :wishlist/lists]))
 
-(defroute add-lists "/list/items/add" []
+(defroute wsl "/wsl/*url" [url]
+  (re-frame/dispatch [:set-add-url url])
+  (re-frame/dispatch [:set-active-panel :wishlist/add-item]))
+
+(defroute add-lists "/list/items/add/*url" [url]
+  (re-frame/dispatch [:set-add-url url])
   (re-frame/dispatch [:set-active-panel :wishlist/add-item]))
 
 (defn hook-browser-navigation! []
