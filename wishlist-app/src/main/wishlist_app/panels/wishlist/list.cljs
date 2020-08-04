@@ -1,5 +1,7 @@
 (ns wishlist-app.panels.wishlist.list
-  (:require [re-frame.core :as re-frame]))
+  (:require [re-frame.core :as re-frame]
+            [wishlist-app.components.modal :as modal]
+            [reagent.ratom :as ratom]))
 
 (def sites [{:id        :takealot.com
              :domains   ["www.takealot.co.za"
@@ -51,13 +53,20 @@
    [:div.column
     [wishlist]]])
 
+(defn item-picture-modal-content []
+  )
+
 (defn add-item-panel []
-  [:div
-   [:div.columns
-    [:div.column
-     [:div.box
-      [:h1.title "Add Item"]
-      [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]]]]])
+  (let [is-active-add-modal (ratom/atom true)
+        add-item-modal      (partial modal/modal {:is-active is-active-add-modal
+                                                  :title "Choose item picture"})]
+    [:div
+     [add-item-modal "Hello!!"]
+     [:div.columns
+      [:div.column
+       [:div.box
+        [:h1.title "Add Item"]
+        [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]]]]]))
 
 (re-frame/reg-event-db
  :set-add-url
