@@ -5,4 +5,4 @@
   [:div.columns.is-centered
    [:div.column
     [:img {:src "/img/logo.png"}]
-    [:h2.title "Where dreams come true"]]])
+    [:h2.title "Where dreams come true."]]])
