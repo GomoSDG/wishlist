@@ -1,7 +1,8 @@
 (ns wishlist-app.panels.wishlist.list
   (:require [re-frame.core :as re-frame]
             [wishlist-app.components.modal :as modal]
-            [reagent.ratom :as ratom]))
+            [reagent.ratom :as ratom]
+            ["request" :as request]))
 
 (def sites [{:id        :takealot.com
              :domains   ["www.takealot.co.za"
@@ -55,32 +56,55 @@
    [:div.column
     [wishlist]]])
 
-(defn item-picture-modal-content []
-  )
+(defn process-resp [on-success]
+  (fn [error resp body]
+    (js/console.log "Okay now?" resp error body)
+    (on-success body)))
+
+(defn item-picture-modal-content [url]
+  (let [image-groups (partition 3 (take 6 (repeat "https://mrpg.scene7.com/is/image/MRP/01_2101018098_SI_00?wid=360&hei=540&qlt=70")))]
+    [:div
+     [:h2.subtitle "Choose an image from below"]
+     [:div.tile.is-ancestor.is-vertical
+      (for [images image-groups]
+        [:div.tile.is-parent
+         (for [url images]
+           [:div.is-child.box {:style {:border  "2px #000000 solid"
+                                       :padding ".3em"
+                                       :margin  ".5em"}}
+            [:figure.image.is-128x128.is-1by1
+             [:img {:src url}]]])])]]))
 
 (defn add-item-panel []
-  (let [is-active-add-modal (ratom/atom true)
+  (let [url                 (re-frame/subscribe [:wishlist-items/item-url])
+        received-html?      (ratom/atom false)
+        html                (ratom/atom nil)
+        on-success          #(do
+                               (reset! html %)
+                               (reset! received-html? true))
+        _                   (js/console.log "Html is: " @html)
+        is-active-add-modal (ratom/atom true)
         add-item-modal      (partial modal/modal {:is-active is-active-add-modal
-                                                  :title "Choose item picture"})]
+                                                  :title     "Item Picture"})]
     [:div
-     [add-item-modal "Hello!!"]
+     [add-item-modal [item-picture-modal-content]]
      [:div.columns
       [:div.column
        (when @(re-frame/subscribe [:wishlist-items/is-valid-url])
          [:div.box
           [:h1.title "Add Item"]
-          [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]])
+          [:h1.subtitle @url]])
        (when-not @(re-frame/subscribe [:wishlist-items/is-valid-url])
          [:div.box
           [:h1.title "Invalid url"]
-          [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]])]]]))
+          [:h1.subtitle @url]])]]]))
 
 (re-frame/reg-event-db
- :set-add-url
+ :set-item-url
  (fn [db [_ url]]
    (-> db
        (assoc :wishlist-items/is-valid-url (seq (re-seq url-regex url)))
-       (assoc :wishlist-items/add-url url))))
+       (assoc :wishlist-items/item-url url))))
 
 (re-frame/reg-sub
  :wishlist-items/is-valid-url
@@ -88,6 +112,6 @@
    (:wishlist-items/is-valid-url db)))
 
 (re-frame/reg-sub
- :wishlist-items/add-url
+ :wishlist-items/item-url
  (fn [db]
-   (:wishlist-items/add-url db)))
+   (:wishlist-items/item-url db)))
