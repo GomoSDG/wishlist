@@ -13,6 +13,8 @@
              :colors    {:primary   "#007aff"
                          :secondary "#1c8644"}}])
 
+(def url-regex #"(https?://)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
+
 (defn wishlist-item [item]
   [:div.box
    [:article.media
@@ -64,15 +66,26 @@
      [add-item-modal "Hello!!"]
      [:div.columns
       [:div.column
-       [:div.box
-        [:h1.title "Add Item"]
-        [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]]]]]))
+       (when @(re-frame/subscribe [:wishlist-items/is-valid-url])
+         [:div.box
+          [:h1.title "Add Item"]
+          [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]])
+       (when-not @(re-frame/subscribe [:wishlist-items/is-valid-url])
+         [:div.box
+          [:h1.title "Invalid url"]
+          [:h1.subtitle @(re-frame/subscribe [:wishlist-items/add-url])]])]]]))
 
 (re-frame/reg-event-db
  :set-add-url
- (fn [db [_ panel]]
-   (js/console.log panel)
-   (assoc db :wishlist-items/add-url panel)))
+ (fn [db [_ url]]
+   (-> db
+       (assoc :wishlist-items/is-valid-url (seq (re-seq url-regex url)))
+       (assoc :wishlist-items/add-url url))))
+
+(re-frame/reg-sub
+ :wishlist-items/is-valid-url
+ (fn [db]
+   (:wishlist-items/is-valid-url db)))
 
 (re-frame/reg-sub
  :wishlist-items/add-url
