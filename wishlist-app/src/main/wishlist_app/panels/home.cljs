@@ -1,7 +1,7 @@
 (ns wishlist-app.panels.home
   (:require [wishlist-app.icons :as icons]))
 
-(defn ^{:navbar :landing} home []
+(defn ^{:navbar :landing :page-title "Home"} home []
   [:div.columns.is-centered
    [:div.column
     [:img {:src "/img/logo.png"}]

@@ -59,5 +59,7 @@
 
 (defn site-layout [panel]
   (let [panel  (re-frame/subscribe [:active-panel])
-        layout (layouts (panels/page-layout @panel))]
+        layout (layouts (panels/page-layout @panel))
+        title  (panels/page-title @panel)
+        set-tile (set! (.-title js/document) (str title " - Wishlist"))]
     [layout panel]))
