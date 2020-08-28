@@ -1,3 +1,4 @@
 node_modules/
 .shadow-cljs/
 hello/
+product-scraper.js
