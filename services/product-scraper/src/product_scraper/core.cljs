@@ -1,53 +1,45 @@
 (ns product-scraper.core
   (:require ["express" :as express]
             ["apify" :as apify]
+            ["cheerio" :as cheerio]
             [cljs.core.async :refer [go <!]]
             [cljs.core.async.interop :refer-macros [<p!]]
-            [product-scraper.crawler.core :as crawler]))
+            [product-scraper.crawler.core :as crawler]
+            [product-scraper.crawler.puppeteer :as puppeteer]
+            [cognitect.transit :as t]))
 
 (set! *warn-on-infer* true)
 
 (defonce server (atom nil))
 
-(defonce request-queue (atom nil))
-
+(defonce w (t/writer :json))
 
 (defn scrape-url [req res]
   (go
-    (let [{url "url"} (js->clj (.-params req))
-          _           (.addRequest @request-queue #js {:url url})
-          crawler     (crawler/create-crawler {:request-queue url
-                                               :handler       crawler/handle-page-fn})]
-      (.run crawler)
-      (.send res url))))
+    (let [{url "url"} (js->clj (.-params ^js req))
+          prod (<! (puppeteer/scrape-page @puppeteer/browser url))]
+      (println (t/write w prod))
+      (.send res (t/write w prod)))))
 
 (defn start-server []
-  (println "Starting server")
-  (let [app (express)]
+  (let [app  (express)
+        port (or 3003)]
     (.get app "/" (fn [req res] (.send res "Hello, world")))
     (.get app "/ts/:url(*)" scrape-url)
-    (.listen app 3003 (fn [] (println "Example app listening on port 3000!")))))
+    (.listen app port (fn [] (println "Product Scraper listening on port " port "!")))))
 
 (defn start! []
   ;; called by main and after reloading code
   (go
     (let []
-      (reset! request-queue )
-      (reset! server (start-server))))
+      (puppeteer/make-browser)
+      (reset! server (start-server)))))
 
 (defn stop! []
   ;; called before reloading code
   (.close @server)
+  (.close @puppeteer/browser)
   (reset! server nil))
-
-(def crawler (crawler/default-crawler "https://cljs.github.io/api/cljs.core/new"))
-
-(crawler/run-crawler crawler)
-
-
-(defn main []
-  ;; executed once, on startup, can do one time setup here
-  (start!))
 
 (defn -main []
   (start!))
