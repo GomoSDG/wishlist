@@ -2,7 +2,9 @@
   (:require [re-frame.core :as re-frame]
             [wishlist-app.components.modal :as modal]
             [reagent.ratom :as ratom]
-            ["request" :as request]))
+            ["request" :as request]
+            [day8.re-frame.http-fx]
+            ))
 
 (def sites [{:id        :takealot.com
              :domains   ["www.takealot.co.za"
