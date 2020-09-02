@@ -7,9 +7,11 @@
     "watch": "npx shadow-cljs watch app"
   },
   "dependencies": {
+    "@serverless-chrome/lambda": "^1.0.0-55",
     "apify": "^0.21.3",
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.16.2",
-    "puppeteer": "^5.2.1"
+    "puppeteer": "^5.2.1",
+    "superagent": "^6.1.0"
   }
 }

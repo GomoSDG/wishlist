@@ -15,4 +15,11 @@
    :compiler-options {:infer-externs :auto
                       :optimizations :simple}
    :devtools         {:after-load  product-scraper.core/start!
-                      :before-load product-scraper.core/stop!}}}}
+                      :before-load product-scraper.core/stop!}}
+  :lambda
+  {:main      product-scraper.core/-main
+   :target    :node-library
+   :exports-fn product-scraper.serverless.core/exports
+   :output-to "serverless/handler.js"
+   :devtools  {:repl-init-ns product-scraper.serverless.core
+               :repl-pprint  true}}}}
